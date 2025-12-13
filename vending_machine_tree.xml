@@ -1,0 +1,26 @@
+<root main_tree_to_execute="MainTree">
+    <BehaviorTree ID="MainTree">
+        <RepeatUntilFail>
+            <Fallback name="RootFallback">
+                <Inverter>
+                    <IsTerminated />
+                </Inverter>
+                <Sequence name="MainSequence">
+                    <Inverter>
+                        <IsTerminated />
+                    </Inverter>
+                    <ReceivedUserInput />
+                    <ProcessUserInput />
+                    <ShowPayment />
+                    <Sequence name="PaymentSequence">
+                        <Inverter>
+                            <Cancelled />
+                        </Inverter>
+                        <PaymentReceived />
+                        <OutputProduct />
+                    </Sequence>
+                </Sequence>
+            </Fallback>
+        </RepeatUntilFail>
+    </BehaviorTree>
+</root>
