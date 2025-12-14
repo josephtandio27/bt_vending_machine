@@ -1,26 +1,26 @@
-<root main_tree_to_execute="MainTree">
+<root BTCPP_format="4" main_tree_to_execute="MainTree">
+
     <BehaviorTree ID="MainTree">
-        <RepeatUntilFail>
-            <Fallback name="RootFallback">
-                <Inverter>
-                    <IsTerminated />
-                </Inverter>
-                <Sequence name="MainSequence">
-                    <Inverter>
-                        <IsTerminated />
-                    </Inverter>
-                    <ReceivedUserInput />
-                    <ProcessUserInput />
-                    <ShowPayment />
-                    <Sequence name="PaymentSequence">
-                        <Inverter>
-                            <Cancelled />
-                        </Inverter>
-                        <PaymentReceived />
-                        <OutputProduct />
-                    </Sequence>
+        <KeepRunningUntilFailure name="RepeatUntilFail">
+            <Sequence name="MainSequence">
+                <!-- <Inverter>
+                    <SubTree ID="CheckTermination" />
+                </Inverter> -->
+                <GetUserInput selection="{number}" />
+                <ReceivedUserInput selection="{number}" />
+                <ProcessUserInput price="{product_price}" flag_name="{terminated}" />
+                <Sequence name="PaymentSequence">
+                    <VendingMachinePayment customer_money="{amount_of_money}" />
+                    <PaymentSuccessful price="{product_price}"
+                        customer_money="{amount_of_money}" />
+                    <OutputProduct />
                 </Sequence>
-            </Fallback>
-        </RepeatUntilFail>
+            </Sequence>
+        </KeepRunningUntilFailure>
     </BehaviorTree>
+<!-- 
+    <BehaviorTree ID="CheckTermination">
+        <IsTerminated name="IsTerminated" flag_name="{terminated}" />
+    </BehaviorTree> -->
+
 </root>
