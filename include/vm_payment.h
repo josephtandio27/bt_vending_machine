@@ -22,12 +22,13 @@ public:
         {
             setOutput("customer_money", _customer_money);
             std::cout << "Payment of $" << _customer_money << " received." << std::endl;
+            return BT::NodeStatus::SUCCESS;
         }
         else
         {
             std::cout << "No payment received. Transaction cancelled." << std::endl;
+            return BT::NodeStatus::FAILURE;
         }
-        return BT::NodeStatus::SUCCESS;
     }
 
 private:

@@ -1,26 +1,17 @@
 <root BTCPP_format="4" main_tree_to_execute="MainTree">
 
     <BehaviorTree ID="MainTree">
-        <KeepRunningUntilFailure name="RepeatUntilFail">
-            <Sequence name="MainSequence">
-                <!-- <Inverter>
-                    <SubTree ID="CheckTermination" />
-                </Inverter> -->
-                <GetUserInput selection="{number}" />
-                <ReceivedUserInput selection="{number}" />
-                <ProcessUserInput price="{product_price}" flag_name="{terminated}" />
-                <Sequence name="PaymentSequence">
-                    <VendingMachinePayment customer_money="{amount_of_money}" />
-                    <PaymentSuccessful price="{product_price}"
-                        customer_money="{amount_of_money}" />
-                    <OutputProduct />
-                </Sequence>
+        <Sequence name="MainSequence">
+            <GetUserInput selection="{number}" />
+            <ReceivedUserInput selection="{number}" />
+            <ProcessUserInput price="{product_price}" flag_name="{terminated}" />
+            <Sequence name="PaymentSequence">
+                <VendingMachinePayment customer_money="{amount_of_money}" />
+                <PaymentSuccessful price="{product_price}" customer_money="{amount_of_money}"
+                    success="{success}" />
+                <OutputProduct success="{success}" />
             </Sequence>
-        </KeepRunningUntilFailure>
+        </Sequence>
     </BehaviorTree>
-<!-- 
-    <BehaviorTree ID="CheckTermination">
-        <IsTerminated name="IsTerminated" flag_name="{terminated}" />
-    </BehaviorTree> -->
 
 </root>

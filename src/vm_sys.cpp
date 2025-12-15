@@ -4,9 +4,7 @@
 void VendingMachineSystem::initializeInventory()
 {
     // Use an initializer list to populate the map.
-    // We use -1.0 to denote the "Shutdown" status (no price).
     inventory_ = {
-        {0, {"Shutdown", -1}},
         {1, {"Chips", 5}},
         {2, {"Soda", 2}},
         {3, {"Water", 1}},
@@ -38,7 +36,6 @@ bool VendingMachineSystem::getItemDetails(int key, std::string& name_out, int& p
 BT::NodeStatus VendingMachineSystem::getUserInput(BT::TreeNode &self)
 {
     std::cout << "Vending machine options:\n";
-    std::cout << "0: Shutdown vending machine\n";
     std::cout << "1: Chips [$5]\n";
     std::cout << "2: Soda [$2]\n";
     std::cout << "3: Water [$1]\n";
@@ -48,9 +45,9 @@ BT::NodeStatus VendingMachineSystem::getUserInput(BT::TreeNode &self)
     std::cin >> _user_selection;
 
     // Validate input
-    if (_user_selection < 0 || _user_selection > 5)
+    if (_user_selection < 1 || _user_selection > 5)
     {
-        std::cout << "Invalid selection. Please choose a number between 0 and 5." << std::endl;
+        std::cout << "Invalid selection. Please choose a number between 1 and 5." << std::endl;
     }
 
     // Set the output port value
@@ -72,14 +69,16 @@ BT::NodeStatus VendingMachineSystem::processUserInput(BT::TreeNode &self)
         
         std::cout << "Item " << _user_selection << ": " << _item_name << " - Price: $" << _item_price << std::endl;
         self.setOutput("price", _item_price);
+        return BT::NodeStatus::SUCCESS;
     }
-    return BT::NodeStatus::SUCCESS;
+    return BT::NodeStatus::FAILURE;
 }
 
-BT::NodeStatus VendingMachineSystem::OutputProduct()
+BT::NodeStatus VendingMachineSystem::OutputProduct(BT::TreeNode &self)
 {
-    if (getItemDetails(_user_selection, _item_name, _item_price))
+    if (self.getInput<bool>("success").value())
     {
+        getItemDetails(_user_selection, _item_name, _item_price);
         std::cout << "Dispensing your " << _item_name << ". Enjoy!" << std::endl;
         _item_name = "";
         _item_price = 0;

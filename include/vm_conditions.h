@@ -21,17 +21,17 @@ BT::NodeStatus ReceivedUserInputCheck(BT::TreeNode &self)
     // 2. Read the boolean value
     int num = selection_num.value();
 
-    if (num <= 5 && num >= 0)
+    if (num <= 5 && num >= 1)
     {
         std::cout << "[Condition] Valid user input.\n";
+        return BT::NodeStatus::SUCCESS;
     }
     else
     {
         std::cout << "[Condition] Invalid user input.\n";
+        return BT::NodeStatus::FAILURE;
         
     }
-    // Condition met: return SUCCESS
-    return BT::NodeStatus::SUCCESS;
 }
 
 BT::NodeStatus PaymentSuccessfulCheck(BT::TreeNode &self)
@@ -52,16 +52,21 @@ BT::NodeStatus PaymentSuccessfulCheck(BT::TreeNode &self)
     if (customer_money.value() == price.value())
     {
         std::cout << "[Condition] Payment sufficient.\n";
+        self.setOutput<bool>("success", true);
+        return BT::NodeStatus::SUCCESS;
     }
     else if (customer_money.value() > price.value())
     {
         int change = customer_money.value() - price.value();
+        self.setOutput<bool>("success", true);
         std::cout << "[Condition] Payment sufficient.\n";
         std::cout << "Dispensing change: $" << change << std::endl;
+        return BT::NodeStatus::SUCCESS;
     }
     else
     {
         std::cout << "[Condition] Payment insufficient.\n";
+        self.setOutput<bool>("success", false);
+        return BT::NodeStatus::FAILURE;
     }
-    return BT::NodeStatus::SUCCESS;
 }
